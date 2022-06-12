@@ -222,6 +222,9 @@
     "symfony/polyfill-mbstring": {
         "version": "v1.26.0"
     },
+    "symfony/profiler-pack": {
+        "version": "v1.0.6"
+    },
     "symfony/property-access": {
         "version": "v6.1.0"
     },
@@ -313,6 +316,19 @@
     },
     "symfony/var-exporter": {
         "version": "v6.1.0"
+    },
+    "symfony/web-profiler-bundle": {
+        "version": "6.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.3",
+            "ref": "24bbc3d84ef2f427f82104f766014e799eefcc3e"
+        },
+        "files": [
+            "config/packages/web_profiler.yaml",
+            "config/routes/web_profiler.yaml"
+        ]
     },
     "symfony/yaml": {
         "version": "v6.1.0"
