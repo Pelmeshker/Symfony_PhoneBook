@@ -7,17 +7,20 @@
     {% if error %}
         <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
+    <h1>Введите данные для входа</h1>
 
     <form action="{{ path('login') }}" method="post">
-        <label for="username">Username</label>
+        <label for="username">Логин:</label>
         <input type="text" id="username" name="_username" value="{{ last_username }}"/>
-
-        <label for="password">Password:</label>
+        <label for="password">Пароль:</label>
         <input type="password" id="password" name="_password"/>
 
         {# If you want to control the URL the user is redirected to on success
         <input type="hidden" name="_target_path" value="/account"/> #}
-
-        <button type="submit">login</button>
+        <button type="submit">Залогиниться</button>
+    </form>
+    <br>
+    <form action="{{ path('app_register') }}" method="post">
+        <button type="submit">Регистрация</button>
     </form>
 {% endblock %}

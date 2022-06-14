@@ -35,31 +35,31 @@
     <table>
         <tr>
             <th>Наименование</th>
-            <th>Телефонный Номер</th>
+            <th>Номер</th>
             <th>Описание</th>
             {% if is_granted('ROLE_ADMIN') %}
                 <th>Кем добавлено</th>
             {% endif %}
-{#             <th>Действие</th>#}
-{#             <th>Действие</th> #}
+             <th>Действие</th>
         </tr>
-
+        {% for entry in entries %}
         <tr>
-            {% for entry in entries %}
-        <td>{{ entry.name|e }}</td>
-        <td>{{ entry.number|e }}</td>
-        <td>{{ entry.description|e }}</td>
+
+        <td>{{ entry.name }}</td>
+        <td>{{ entry.number }}</td>
+        <td>{{ entry.description }}</td>
         {% if is_granted('ROLE_ADMIN') %}
-        <td>{{ entry.owner|e }}</td>
+        <td>{{ entry.owned_by }}</td>
         {% endif %}
-{#                <td><form action="{{ path('edit_entry') }}" method="post">#}
-{#                    <button type="submit">Редактировать</button>#}
-{#                </form>#}
-{#                <form action="{{ path('delete_entry') }}" method="post">#}
-{#                    <button type="submit">Удалить</button>#}
-{#                </form>#}
-{#                </td>#}
+                <td><form action="{{ path('edit_entry', {'id': entry.id }) }}" method="post">
+                    <button type="submit">Редактировать</button>
+                </form>
+            <td><form action="{{ path('delete_entry', {'id': entry.id }) }}" method="post">
+                    <button type="submit">Удалить</button>
+                </form>
+                </td>
         {% endfor %}
+
 
 
         </tr>

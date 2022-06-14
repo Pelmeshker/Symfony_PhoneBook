@@ -25,8 +25,10 @@ class PhoneEntry
     #[ORM\Column(type: 'integer')]
     private $priority;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $owner;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private $owned_by;
+
 
     public function getId(): ?int
     {
@@ -81,15 +83,22 @@ class PhoneEntry
         return $this;
     }
 
-    public function getOwner(): ?string
+    public function getOwned_By(): ?User
     {
-        return $this->owner;
+        return $this->owned_by;
     }
 
-    public function setOwner(string $owner): self
+    public function getOwnedBy(): ?User
     {
-        $this->owner = $owner;
+        return $this->owned_by;
+    }
+
+    public function setOwnedBy(?User $owned_by): self
+    {
+        $this->owned_by = $owned_by;
 
         return $this;
     }
+
+
 }
