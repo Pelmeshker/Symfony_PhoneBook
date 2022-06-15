@@ -12,10 +12,8 @@ class UserFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-//            ->add('roles')
             ->add('description')
-            ->add('isBanned')
-        ;
+            ->add('isBanned');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

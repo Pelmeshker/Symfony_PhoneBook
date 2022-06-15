@@ -81,7 +81,7 @@ class MainController extends AbstractController
         if ($user->getRoles() == ["ROLE_ADMIN"]) {
             $user->setRoles(["ROLE_USER"]);
         } else {
-                //Если внезапно роль окажется другой, то ничего не произойдет
+            //Если внезапно роль окажется другой, то ничего не произойдет
         }
         $entityManager->persist($user);
         $entityManager->flush();

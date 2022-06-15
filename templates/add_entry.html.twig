@@ -3,32 +3,41 @@
 {% block title %}Окно работы с записями{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <style>
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+        }
 
-<div class="example-wrapper">
+        .example-wrapper code {
+            background: #F5F5F5;
+            padding: 2px 6px;
+        }
+    </style>
 
-    <h1>Добавление\изменение записи</h1>
+    <div class="example-wrapper">
 
-    {{ form_start(entryForm) }}
-    {{ form_row(entryForm.name, {
-        label: 'Имя Контакта'
-    }) }}
-    {{ form_row(entryForm.number, {
-        label: 'Телефонный номер'
-    }) }}
-    {{ form_row(entryForm.description, {
-        label: 'Описание'
-    }) }}
-    {{ form_row(entryForm.priority, {
-        label: 'Приоритет(больше-выше в списке)'
-    }) }}
+        <h1>Добавление\изменение записи</h1>
 
-    <button type="submit" class="btn">Сохранить</button>
-    {{ form_end(entryForm) }}
+        {{ form_start(entryForm) }}
+        {{ form_row(entryForm.name, {
+            label: 'Имя Контакта'
+        }) }}
+        {{ form_row(entryForm.number, {
+            label: 'Телефонный номер'
+        }) }}
+        {{ form_row(entryForm.description, {
+            label: 'Описание'
+        }) }}
+        {{ form_row(entryForm.priority, {
+            label: 'Приоритет(больше-выше в списке)'
+        }) }}
 
-</div>
+        <button type="submit" class="btn">Сохранить</button>
+        {{ form_end(entryForm) }}
+
+    </div>
 
 {% endblock %}
