@@ -25,6 +25,7 @@ class PhoneEntryController extends AbstractController
         $entry->setOwnedBy($this->getUser());
 
         $form = $this->createForm(PhoneEntryFormType::class, $entry);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -45,7 +46,6 @@ class PhoneEntryController extends AbstractController
     {
 
         $entry = $doctrine->getRepository(PhoneEntry::class)->find($id);
-
         $form = $this->createForm(PhoneEntryFormType::class, $entry);
         $form->handleRequest($request);
 
@@ -71,8 +71,6 @@ class PhoneEntryController extends AbstractController
         $entityManager->flush();
         return $this->redirectToRoute('app_main_showmain');
     }
-
-
 
     #[Route('/saveEntry', name: 'save_entry')]
     public function saveEntry(PhoneEntry $phoneEntry): Response

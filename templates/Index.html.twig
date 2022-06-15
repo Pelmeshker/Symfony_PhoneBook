@@ -3,93 +3,69 @@
 {% block title %}Телефонный справочник{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper {
-        margin: 1em auto;
-        max-width: 800px;
-        width: 95%;
-        font: 18px/1.5 sans-serif;
-    }
+    <style>
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+        }
 
-    .example-wrapper code {
-        background: #F5F5F5;
-        padding: 2px 6px;
-    }
-</style>
+        .example-wrapper code {
+            background: #F5F5F5;
+            padding: 2px 6px;
+        }
+    </style>
 
-<div class="example-wrapper">
+    <div class="example-wrapper">
 
-    {# <h3>Вот это да, индекс загружен!</h3> #}
-    {# {% if is_granted('IS_AUTHENTICATED_FULLY') %} #}
-    {# <p>Пользователь авторизован</p> #}
-    {# {% endif %} #}
+        <table>
+            <tr>
+                <th>Наименование</th>
+                <th>Номер</th>
+                <th>Описание</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th>Кем добавлено</th>
+                {% endif %}
+                <th>Действие</th>
+            </tr>
+            {% for entry in entries|sort((a, b) => b.priority <=> a.priority) %}
+            <tr>
 
-    {# {% if is_granted('ROLE_USER') %} #}
-    {# <p>Роль: юзер</p> #}
-    {# {% endif %} #}
-
-    {# {% if is_granted('ROLE_ADMIN') %} #}
-    {# <p>Роль: администратор</p> #}
-    {# {% endif %} #}
-
-    <table>
-        <tr>
-            <th>Наименование</th>
-            <th>Номер</th>
-            <th>Описание</th>
-            {% if is_granted('ROLE_ADMIN') %}
-                <th>Кем добавлено</th>
-            {% endif %}
-             <th>Действие</th>
-        </tr>
-        {% for entry in entries %}
-        <tr>
-
-        <td>{{ entry.name }}</td>
-        <td>{{ entry.number }}</td>
-        <td>{{ entry.description }}</td>
-        {% if is_granted('ROLE_ADMIN') %}
-        <td>{{ entry.owned_by }}</td>
-        {% endif %}
-                <td><form action="{{ path('edit_entry', {'id': entry.id }) }}" method="post">
-                    <button type="submit">Редактировать</button>
-                </form>
-            <td><form action="{{ path('delete_entry', {'id': entry.id }) }}" method="post">
-                    <button type="submit">Удалить</button>
-                </form>
+                <td>{{ entry.name }}</td>
+                <td>{{ entry.number }}</td>
+                <td>{{ entry.description }}</td>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>{{ entry.owned_by }}</td>
+                {% endif %}
+                <td>
+                    <form action="{{ path('edit_entry', {'id': entry.id }) }}" method="post">
+                        <button type="submit">Редактировать</button>
+                    </form>
+                <td>
+                    <form action="{{ path('delete_entry', {'id': entry.id }) }}" method="post">
+                        <button type="submit">Удалить</button>
+                    </form>
                 </td>
-        {% endfor %}
+                {% endfor %}
 
+            </tr>
 
+        </table>
 
-        </tr>
+        <form action="{{ path('add_entry') }}" method="post">
+            <button type="submit">Добавить</button>
+        </form>
 
-    </table>
-        {# <th:block th:each="pbe : ${PhoneBookEntries}"> #}
-        {# <tr> #}
-        {# <td th:text="${pbe.name}"/> #}
-        {# <td th:text="${pbe.surname}"/> #}
-        {# <td th:text="${pbe.phoneNumber}"/> #}
-        {# <td th:text="${pbe.email}"/> #}
-        {# <div sec:authorize="hasRole('ROLE_ADMIN')"><td th:text="${pbe.authorId}"/></div> #}
-        {# <td> #}
-        {# <form action="#" th:action="@{'/deletePhoneBookEntry/' + ${pbe.id}}" th:method="get"> #}
-        {# <button type="submit" id="submitButton">Удалить</button> #}
-        {# </form> #}
-        {# </td> #}
-        {# <td> #}
-        {# <form action="#" th:action="@{'/updatePhoneBookEntry' + ${pbe.id}}" th:method="get"> #}
-        {# <button type="submit" id="editButton">Изменить</button> #}
-        {# </form> #}
-        {# </td> #}
-        {# </tr> #}
+        {% if is_granted('ROLE_ADMIN') %}
+            <form action="{{ path('admin') }}" method="post">
+                <button type="submit">Админка</button>
+            </form>
+        {% endif %}
 
-        {# </th:block> #}
+        <form action="{{ path('app_logout') }}" method="get">
+            <button type="submit">Разлогиниться</button>
+        </form>
 
-
-
-    <form action="{{ path('add_entry') }}" method="post">
-        <button type="submit">Добавить</button>
-    </form>
-</div>
+    </div>
 {% endblock %}

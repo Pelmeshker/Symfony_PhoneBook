@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Окно работы с записями{% endblock %}
+
+{% block body %}
+    <style>
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+        }
+
+        .example-wrapper code {
+            background: #F5F5F5;
+            padding: 2px 6px;
+        }
+    </style>
+
+    <div class="example-wrapper">
+
+        <h1>Добавление\изменение пользователя {{ user.username }}</h1>
+
+        {% if user.roles|join == 'ROLE_USER' %}
+            <form action="{{ path('change_user_role', {'id': user.id }) }}" method="post">
+                <button type="submit">Повысить до админа</button>
+            </form>
+        {% elseif user.roles|join == 'ROLE_ADMIN' %}
+            <form action="{{ path('change_user_role', {'id': user.id }) }}" method="post">
+                <button type="submit">Понизить до юзера</button>
+            </form>
+        {% else %}
+        {% endif %}
+
+        {{ form_start(userForm) }}
+        {{ form_row(userForm.description, {
+            label: 'Примечание'
+        }) }}
+        {{ form_row(userForm.isBanned, {
+            label: 'Забанен?'
+        }) }}
+
+        <button type="submit" class="btn">Сохранить</button>
+        {{ form_end(userForm) }}
+
+    </div>
+
+{% endblock %}
