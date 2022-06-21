@@ -3,18 +3,21 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
+    {% if error %}
+        <div>Такой логин уже существует</div>
+    {% endif %}
     <h1>Регистрация</h1>
 
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username, {
-            label: 'Логин'
-        }) }}
+    {{ form_row(registrationForm.username, {
+        label: 'Логин'
+    }) }}
     <br>
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Пароль'
-        }) }}
-{#    {{ form_row(registrationForm.agreeTerms) }}#}
-<br>
-        <button type="submit" class="btn">Зарегистрироваться</button>
+    {{ form_row(registrationForm.plainPassword, {
+        label: 'Пароль'
+    }) }}
+    {# {{ form_row(registrationForm.agreeTerms) }} #}
+    <br>
+    <button type="submit" class="btn">Зарегистрироваться</button>
     {{ form_end(registrationForm) }}
 {% endblock %}

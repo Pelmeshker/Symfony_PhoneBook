@@ -43,6 +43,12 @@
                      <form action="{{ path('edit_user', {'id': user.id }) }}" method="post">
                      <button type="submit">Редактировать</button>
                      </form>
+                    <form action="{{ path('edit_user_password', {'id': user.id }) }}" method="post">
+                        <button type="submit">Сменить пароль</button>
+                    </form>
+                    <form action="{{ path('delete_user', {'id': user.id }) }}" method="post">
+                        <button type="submit">Удалить</button>
+                    </form>
                     {% endfor %}
             </tr>
         </table>

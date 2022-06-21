@@ -33,6 +33,9 @@
         {% endif %}
 
         {{ form_start(userForm) }}
+        {{ form_row(userForm.username, {
+            label: 'Имя пользователя'
+        }) }}
         {{ form_row(userForm.description, {
             label: 'Примечание'
         }) }}

@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Окно работы с записями{% endblock %}
+
+{% block body %}
+    <style>
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+        }
+
+        .example-wrapper code {
+            background: #F5F5F5;
+            padding: 2px 6px;
+        }
+    </style>
+
+    <div class="example-wrapper">
+
+        <h1>Изменение пользователя</h1>
+
+        {{ form_start(userForm) }}
+        {{ form_row(userForm.username, {
+            label: 'Имя пользователя'
+        }) }}
+
+        <button type="submit" class="btn">Сохранить</button>
+        {{ form_end(userForm) }}
+
+    </div>
+
+{% endblock %}

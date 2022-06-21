@@ -63,6 +63,15 @@
             </form>
         {% endif %}
 
+        {% if is_granted('ROLE_USER') %}
+            <form action="{{ path('edit_selfuser', {'id': app.user.id }) }}" method="post">
+                <button type="submit">Изменить данные текущего пользователя</button>
+            </form>
+            <form action="{{ path('edit_user_password', {'id': app.user.id }) }}" method="post">
+                <button type="submit">Сменить пароль</button>
+            </form>
+        {% endif %}
+
         <form action="{{ path('app_logout') }}" method="get">
             <button type="submit">Разлогиниться</button>
         </form>
