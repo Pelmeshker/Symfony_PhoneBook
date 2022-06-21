@@ -29,7 +29,7 @@
                 {% endif %}
                 <th>Действие</th>
             </tr>
-            {% for entry in entries|sort((a, b) => b.priority <=> a.priority) %}
+            {% for entry in entries %}
             <tr>
 
                 <td>{{ entry.name }}</td>

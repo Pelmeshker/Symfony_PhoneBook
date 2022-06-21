@@ -31,13 +31,15 @@ class MainController extends AbstractController
         if ($this->security->isGranted('ROLE_USER')) {
 
             $entries = $doctrine->getRepository(PhoneEntry::class)->findBy(
-                ['owned_by' => $this->getUser()]
+                ['owned_by' => $this->getUser()], ['priority' => 'DESC']
             );
             return $this->render('Index.html.twig', ['entries' => $entries]);
         }
 
         if ($this->security->isGranted('ROLE_ADMIN')) {
-            $entries = $doctrine->getRepository(PhoneEntry::class)->findAll();
+            $entries = $doctrine->getRepository(PhoneEntry::class)->findBy(
+                [], ['priority' => 'DESC']
+            );
             return $this->render('Index.html.twig', ['entries' => $entries]);
         }
     }
