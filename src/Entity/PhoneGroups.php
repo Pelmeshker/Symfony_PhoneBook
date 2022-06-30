@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\PhoneEntryRepository;
+use App\Repository\PhoneGroupsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PhoneEntryRepository::class)]
-class PhoneEntry
+#[ORM\Entity(repositoryClass: PhoneGroupsRepository::class)]
+class PhoneGroups
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,26 +18,27 @@ class PhoneEntry
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    #[ORM\Column(type: 'integer')]
-    private $number;
-
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $description;
 
     #[ORM\Column(type: 'integer')]
     private $priority;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\Column(type: 'boolean')]
+    private $isDefault;
+
+    #[ORM\ManyToOne(targetEntity: user::class, inversedBy: 'phoneGroups')]
     #[ORM\JoinColumn(nullable: false)]
     private $owned_by;
 
-    #[ORM\ManyToMany(targetEntity: PhoneGroups::class, mappedBy: 'contains_entries')]
-    private $entryGroups;
+    #[ORM\ManyToMany(targetEntity: PhoneEntry::class, inversedBy: 'entryGroups')]
+    private $contains_entries;
 
     public function __construct()
     {
-        $this->entryGroups = new ArrayCollection();
+        $this->contains_entries = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -52,18 +53,6 @@ class PhoneEntry
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getNumber(): ?int
-    {
-        return $this->number;
-    }
-
-    public function setNumber(int $number): self
-    {
-        $this->number = $number;
 
         return $this;
     }
@@ -92,17 +81,24 @@ class PhoneEntry
         return $this;
     }
 
-    public function getOwned_By(): ?User
+    public function isIsDefault(): ?bool
+    {
+        return $this->isDefault;
+    }
+
+    public function setIsDefault(bool $isDefault): self
+    {
+        $this->isDefault = $isDefault;
+
+        return $this;
+    }
+
+    public function getOwnedBy(): ?user
     {
         return $this->owned_by;
     }
 
-    public function getOwnedBy(): ?User
-    {
-        return $this->owned_by;
-    }
-
-    public function setOwnedBy(?User $owned_by): self
+    public function setOwnedBy(?user $owned_by): self
     {
         $this->owned_by = $owned_by;
 
@@ -110,31 +106,27 @@ class PhoneEntry
     }
 
     /**
-     * @return Collection<int, PhoneGroups>
+     * @return Collection<int, PhoneEntry>
      */
-    public function getEntryGroups(): Collection
+    public function getContainsEntries(): Collection
     {
-        return $this->entryGroups;
+        return $this->contains_entries;
     }
 
-    public function addEntryGroup(PhoneGroups $entryGroup): self
+    public function addContainsEntry(PhoneEntry $containsEntry): self
     {
-        if (!$this->entryGroups->contains($entryGroup)) {
-            $this->entryGroups[] = $entryGroup;
-            $entryGroup->addContainsEntry($this);
+        if (!$this->contains_entries->contains($containsEntry)) {
+            $this->contains_entries[] = $containsEntry;
         }
 
         return $this;
     }
 
-    public function removeEntryGroup(PhoneGroups $entryGroup): self
+    public function removeContainsEntry(PhoneEntry $containsEntry): self
     {
-        if ($this->entryGroups->removeElement($entryGroup)) {
-            $entryGroup->removeContainsEntry($this);
-        }
+        $this->contains_entries->removeElement($containsEntry);
 
         return $this;
     }
-
 
 }
