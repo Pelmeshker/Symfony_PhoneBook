@@ -39,6 +39,15 @@ class PhoneGroupsRepository extends ServiceEntityRepository
         }
     }
 
+    public function findGroupsByUser($user): array
+    {
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.owned_by = :u')
+            ->setParameter('u', $user)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return PhoneGroups[] Returns an array of PhoneGroups objects
 //     */

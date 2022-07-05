@@ -27,10 +27,6 @@ class PhoneEntry
     #[ORM\Column(type: 'integer')]
     private $priority;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private $owned_by;
-
     #[ORM\ManyToMany(targetEntity: PhoneGroups::class, mappedBy: 'contains_entries')]
     private $entryGroups;
 
@@ -92,22 +88,22 @@ class PhoneEntry
         return $this;
     }
 
-    public function getOwned_By(): ?User
-    {
-        return $this->owned_by;
-    }
+//    /**
+//     * @return mixed
+//     */
+//    public function getCurrentGroup()
+//    {
+//        return $this->currentGroup;
+//    }
+//
+//    /**
+//     * @param mixed $currentGroup
+//     */
+//    public function setCurrentGroup($currentGroup): void
+//    {
+//        $this->currentGroup = $currentGroup;
+//    }
 
-    public function getOwnedBy(): ?User
-    {
-        return $this->owned_by;
-    }
-
-    public function setOwnedBy(?User $owned_by): self
-    {
-        $this->owned_by = $owned_by;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, PhoneGroups>
@@ -116,6 +112,7 @@ class PhoneEntry
     {
         return $this->entryGroups;
     }
+
 
     public function addEntryGroup(PhoneGroups $entryGroup): self
     {

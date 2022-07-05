@@ -2,23 +2,16 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Form\PhoneEntryFormType;
-use App\Form\RegistrationFormType;
 use App\Entity\PhoneEntry;
 use App\Repository\PhoneEntryRepository;
-use App\Security\UserChecker;
 use App\Service\AccessControl;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpKernel\Exception;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
 class PhoneEntryController extends AbstractController
@@ -35,7 +28,6 @@ class PhoneEntryController extends AbstractController
     public function addEntry(Request $request, EntityManagerInterface $entityManager): Response
     {
         $entry = new PhoneEntry();
-        $entry->setOwnedBy($this->getUser());
 
         $form = $this->createForm(PhoneEntryFormType::class, $entry);
 
@@ -58,12 +50,12 @@ class PhoneEntryController extends AbstractController
     public function editEntry(Request $request, EntityManagerInterface $entityManager, int $id,
                               ManagerRegistry $doctrine, AccessControl $checker): Response
     {
+        /** @var PhoneEntry|null $entry */
+
         $entry = $doctrine->getRepository(PhoneEntry::class)->find($id);
         if ($checker->isAbleToEditEntry($entry)) {
-
             $form = $this->createForm(PhoneEntryFormType::class, $entry);
             $form->handleRequest($request);
-
             if ($form->isSubmitted() && $form->isValid()) {
                 $entityManager->persist($entry);
                 $entityManager->flush();
@@ -74,10 +66,10 @@ class PhoneEntryController extends AbstractController
                 'entryForm' => $form->createView(),
             ]);
         }
+        return new Response();
     }
 
-    #[
-        Route('/deleteEntry/{id}', name: 'delete_entry')]
+    #[Route('/deleteEntry/{id}', name: 'delete_entry')]
     public function deleteEntry(Request $request, EntityManagerInterface $entityManager, int $id,
                                 ManagerRegistry $doctrine, AccessControl $checker): Response
     {

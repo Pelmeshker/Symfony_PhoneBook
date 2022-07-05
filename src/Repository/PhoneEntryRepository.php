@@ -54,6 +54,31 @@ class PhoneEntryRepository extends ServiceEntityRepository
 //        ;
 //    }
 
+    /**
+     * @return PhoneEntry[] Returns an array of PhoneEntry objects
+     */
+    public function findEntriesByUser($user): array
+    {
+        return $this->createQueryBuilder('p')
+            ->Join('p.entryGroups', 'pg')
+            ->andWhere('pg.owned_by = :u')
+            ->setParameter('u', $user)
+            ->addorderBy('pg.priority', 'DESC')
+            ->addorderBy('p.priority', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllEntries(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->Join('p.entryGroups', 'pg')
+            ->addorderBy('pg.priority', 'DESC')
+            ->addorderBy('p.priority', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    public function findOneBySomeField($value): ?PhoneEntry
 //    {
 //        return $this->createQueryBuilder('p')

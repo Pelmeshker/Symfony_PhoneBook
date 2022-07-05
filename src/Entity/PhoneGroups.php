@@ -27,11 +27,12 @@ class PhoneGroups
     #[ORM\Column(type: 'boolean')]
     private $isDefault;
 
-    #[ORM\ManyToOne(targetEntity: user::class, inversedBy: 'phoneGroups')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'phoneGroups')]
     #[ORM\JoinColumn(nullable: false)]
     private $owned_by;
 
     #[ORM\ManyToMany(targetEntity: PhoneEntry::class, inversedBy: 'entryGroups')]
+    #[ORM\JoinTable (name: 'phone_groups_phone_entry')]
     private $contains_entries;
 
     public function __construct()
@@ -128,5 +129,11 @@ class PhoneGroups
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
+
 
 }

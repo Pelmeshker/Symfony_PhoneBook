@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Телефонный справочник{% endblock %}
+
+{% block body %}
+    <style>
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+        }
+
+        .example-wrapper code {
+            background: #F5F5F5;
+            padding: 2px 6px;
+        }
+    </style>
+
+    <div class="example-wrapper">
+
+        <table>
+            <tr>
+                <th>Название группы</th>
+                <th>Приоритет</th>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th>Владелец</th>
+                {% endif %}
+
+                <th>Основная?</th>
+                <th>Действие</th>
+            </tr>
+            {% for group in groups %}
+            <tr>
+                <td>{{ group.name }}</td>
+                <td>{{ group.priority }}</td>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>{{ group.ownedBy }}</td>
+                {% endif %}
+                {% if  group.isDefault  == false %}
+                    <td>Нет</td>
+                {% else %}
+                    <td>Да</td>
+                {% endif %}
+
+
+                <td>
+                    <form action="{{ path('edit_group', {'id': group.id }) }}">
+                        <button type="submit">Редактировать</button>
+                    </form>
+                    <form action="{{ path('delete_group', {'id': group.id }) }}" method="post">
+                        <button type="submit">Удалить</button>
+                    </form>
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
+        <form action="{{ path('add_group') }}" method="post">
+            <button type="submit">Добавить группу</button>
+        </form>
+        <form action="{{ path('app_main_showmain') }}" method="post">
+            <button type="submit">Вернуться на главную</button>
+        </form>
+
+
+    </div>
+{% endblock %}

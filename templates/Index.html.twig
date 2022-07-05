@@ -24,9 +24,7 @@
                 <th>Наименование</th>
                 <th>Номер</th>
                 <th>Описание</th>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <th>Кем добавлено</th>
-                {% endif %}
+                <th>Группа</th>
                 <th>Действие</th>
             </tr>
             {% for entry in entries %}
@@ -35,9 +33,7 @@
                 <td>{{ entry.name }}</td>
                 <td>{{ entry.number }}</td>
                 <td>{{ entry.description }}</td>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <td>{{ entry.owned_by }}</td>
-                {% endif %}
+                <td>{{ entry.entryGroups|join }}</td>
                 <td>
                     <form action="{{ path('edit_entry', {'id': entry.id }) }}" method="post">
                         <button type="submit">Редактировать</button>
@@ -54,7 +50,11 @@
         </table>
 
         <form action="{{ path('add_entry') }}" method="post">
-            <button type="submit">Добавить</button>
+            <button type="submit">Добавить запись</button>
+        </form>
+
+        <form action="{{ path('groups') }}" method="post">
+            <button type="submit">Управление группами</button>
         </form>
 
         {% if is_granted('ROLE_ADMIN') %}

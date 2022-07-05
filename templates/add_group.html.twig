@@ -21,26 +21,23 @@
 
         <h1>Добавление\изменение записи</h1>
 
-        {{ form_start(entryForm) }}
-        {{ form_row(entryForm.name, {
-            label: 'Имя Контакта'
+        {{ form_start(groupForm) }}
+        {{ form_row(groupForm.name, {
+            label: 'Имя Группы'
         }) }}
-        {{ form_row(entryForm.number, {
-            label: 'Телефонный номер'
-        }) }}
-        {{ form_row(entryForm.description, {
+        {{ form_row(groupForm.description, {
             label: 'Описание'
         }) }}
-        {{ form_row(entryForm.entryGroups, {
-            label: 'Группа'
-        }) }}
-        {{ form_row(entryForm.priority, {
+        {{ form_row(groupForm.priority, {
             label: 'Приоритет(больше-выше в списке)'
         }) }}
 
         <button type="submit" class="btn">Сохранить</button>
-        {{ form_end(entryForm) }}
+        {{ form_end(groupForm) }}
 
+        <form action="{{ path('groups') }}" method="post">
+            <button type="submit">Вернуться к списку групп</button>
+        </form>
     </div>
 
 {% endblock %}

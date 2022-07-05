@@ -41,8 +41,6 @@ class RegistrationController extends AbstractController
                     'error' => $error,
                 ]);
             }
-
-
             // do anything else you need here, like send an email
 
             return $this->redirectToRoute('app_main_showmain');

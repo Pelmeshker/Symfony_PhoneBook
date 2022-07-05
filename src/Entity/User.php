@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -30,6 +31,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean')]
     private $isBanned;
+
+    #[ORM\OneToMany(mappedBy: 'owned_by', targetEntity: PhoneGroups::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private $phoneGroups;
 
     public function getId(): ?int
     {
@@ -129,5 +134,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->username;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPhoneGroups()
+    {
+        return $this->phoneGroups;
+    }
+
+    /**
+     * @param mixed $phoneGroups
+     */
+    public function setPhoneGroups($phoneGroups): void
+    {
+        $this->phoneGroups = $phoneGroups;
+    }
+
 
 }

@@ -24,17 +24,12 @@ class MainController extends AbstractController
     {
 
         if ($this->security->isGranted('ROLE_USER')) {
-
-            $entries = $doctrine->getRepository(PhoneEntry::class)->findBy(
-                ['owned_by' => $this->getUser()], ['priority' => 'DESC']
-            );
+            $entries = $doctrine->getRepository(PhoneEntry::class)->findEntriesByUser($this->getUser());
             return $this->render('Index.html.twig', ['entries' => $entries]);
         }
 
         if ($this->security->isGranted('ROLE_ADMIN')) {
-            $entries = $doctrine->getRepository(PhoneEntry::class)->findBy(
-                [], ['priority' => 'DESC']
-            );
+            $entries = $doctrine->getRepository(PhoneEntry::class)->findAllEntries();
             return $this->render('Index.html.twig', ['entries' => $entries]);
         }
     }
