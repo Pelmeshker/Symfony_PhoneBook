@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\PhoneGroups;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,8 +33,17 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+
+            $group = new PhoneGroups();
+            $group->setName("DefaultUserGroup");
+            $group->setIsDefault(true);
+            $group->setDescription("Дефолтная группа пользователя " . $user->getUsername());
+            $group->setOwnedBy($user);
+            $group->setPriority(1);
+
             try {
                 $entityManager->persist($user);
+                $entityManager->persist($group);
                 $entityManager->flush();
             } catch (Exception $error) {
                 return $this->render('registration/register.html.twig', [

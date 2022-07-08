@@ -82,12 +82,4 @@ class PhoneEntryController extends AbstractController
         }
     }
 
-    #[Route('/saveEntry', name: 'save_entry')]
-    public function saveEntry(PhoneEntry $phoneEntry): Response
-    {
-        $EntryRepo = new PhoneEntryRepository();
-        $EntryRepo->add($phoneEntry);
-        return $this->render('Index.html.twig');
-    }
-
 }

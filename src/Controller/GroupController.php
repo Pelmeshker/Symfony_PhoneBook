@@ -2,14 +2,18 @@
 
 namespace App\Controller;
 
+use App\Entity\PhoneEntry;
 use App\Entity\PhoneGroups;
+use App\Entity\User;
 use App\Form\GroupFormType;
 use App\Service\AccessControl;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
@@ -87,11 +91,33 @@ class GroupController extends AbstractController
     public function deleteGroup(Request $request, EntityManagerInterface $entityManager, int $id,
                                 ManagerRegistry $doctrine, AccessControl $checker): Response
     {
+        /** @var PhoneGroups|null $group */
+
         $group = $doctrine->getRepository(PhoneGroups::class)->find($id);
         if ($checker->isAbleToDeleteGroup($group)) {
-            $entityManager->remove($group);
-            $entityManager->flush();
-            return $this->redirectToRoute('groups');
+            $entityManager->getConnection()->beginTransaction();
+            try {
+                $groupEntries = $group->getContainsEntries();
+                foreach ($groupEntries as $entry) {
+                    $copyEntry = new PhoneEntry();
+                    $copyEntry->setName($entry->getName());
+                    $copyEntry->setNumber($entry->getNumber());
+                    $copyEntry->setDescription($entry->getDescription());
+                    $copyEntry->setPriority($entry->getPriority());
+
+                    $copyEntry->addEntryGroup($doctrine->getRepository(PhoneGroups::class)->findDefaultGroupByUser($this->getUser()));
+                    $entityManager->persist($copyEntry);
+                }
+                $entityManager->remove($group);
+                $entityManager->flush();
+                $entityManager->getConnection()->commit();
+                return $this->redirectToRoute('groups');
+            } catch (Exception $e) {
+                $entityManager->getConnection()->rollBack();
+                throw $e;
+
+
+            }
         }
     }
 }

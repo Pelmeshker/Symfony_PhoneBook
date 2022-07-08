@@ -2,12 +2,15 @@
 // src/Controller/LuckyController.php
 namespace App\Controller;
 
+use App\Entity\PhoneEntry;
+use App\Entity\PhoneGroups;
 use App\Entity\User;
 use App\Form\UserFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -77,8 +80,22 @@ class AdminController extends AbstractController
     public function deleteUser(EntityManagerInterface $entityManager, int $id, ManagerRegistry $doctrine): Response
     {
         $user = $doctrine->getRepository(User::class)->find($id);
-        $entityManager->remove($user);
-        $entityManager->flush();
-        return $this->redirectToRoute('admin');
+        $entityManager->getConnection()->beginTransaction();
+        try {
+            $groups = $entityManager->getRepository(PhoneGroups::class)->findBy(['owned_by' => $user]);
+            foreach ($groups as $group) {
+                $entityManager->remove($group);
+            }
+            $entityManager->remove($user);
+            $entityManager->flush();
+            $entityManager->getConnection()->commit();
+            return $this->redirectToRoute('admin');
+        } catch (Exception $e) {
+            $entityManager->getConnection()->rollBack();
+            throw $e;
+
+
+            return $this->redirectToRoute('admin');
+        }
     }
 }

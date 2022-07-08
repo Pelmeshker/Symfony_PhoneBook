@@ -48,6 +48,15 @@ class PhoneGroupsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findDefaultGroupByUser($user): PhoneGroups
+    {
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.isDefault = true and g.owned_by = :u')
+            ->setParameters(['u' => $user])
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 //    /**
 //     * @return PhoneGroups[] Returns an array of PhoneGroups objects
 //     */
